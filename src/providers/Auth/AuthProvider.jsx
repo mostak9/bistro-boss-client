@@ -55,12 +55,14 @@ const AuthProvider = ({ children }) => {
         axiosPublic.post("/api/v1/jwt", userInfo).then((res) => {
           if (res.data.token) {
             localStorage.setItem("access-token", res.data.token);
+            setIsLoading(false);
           }
         });
       } else {
         localStorage.removeItem("access-token");
+        setIsLoading(false)
       }
-      setIsLoading(false);
+      
     });
     return () => subscribe();
   }, [axiosPublic]);

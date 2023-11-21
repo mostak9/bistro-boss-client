@@ -1,5 +1,5 @@
 import { createElement, useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../../providers/Auth/AuthProvider";
 import {
   Menu,
@@ -17,27 +17,37 @@ import {
 } from "@heroicons/react/24/solid";
 import { FaCartPlus } from "react-icons/fa6";
 import useCarts from "../../../hooks/useCarts/useCarts";
+import useAdmin from "../../../hooks/useAdmin/useAdmin";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
   const [carts] = useCarts();
+  const [isAdmin] = useAdmin();
   
   const navLinks = (
     <>
       <li>
-        <Link to={"/"}>Home</Link>
+        <NavLink to={"/"}>Home</NavLink>
       </li>
       <li>
-        <Link>Contact Us</Link>
+        <NavLink to={'/contact'}>Contact Us</NavLink>
+      </li>
+      
+      <li>
+        <NavLink to={"/menu"}>Our Menu</NavLink>
       </li>
       <li>
-        <Link>Dashboard</Link>
+        <NavLink to={"/shop/salad"}>Our Shop</NavLink>
       </li>
       <li>
-        <Link to={"/menu"}>Our Menu</Link>
-      </li>
-      <li>
-        <Link to={"/shop/salad"}>Our Shop</Link>
+        {
+          user && isAdmin && <NavLink to='/dashboard/adminHome'>Dashboard</NavLink>
+          // user ? isAdmin ? <NavLink to='/dashboard/adminHome'>Dashboard</NavLink> : <NavLink to='/dashboard/userHome'>Dashboard</NavLink>: ''
+        }
+        {
+          user && !isAdmin && <NavLink to='/dashboard/userHome'>Dashboard</NavLink>
+        }
+        
       </li>
     </>
   );
